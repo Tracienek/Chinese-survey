@@ -1,0 +1,11 @@
+:root {
+  --bs-primary: #d8c3a5;   /* be nhạt */
+  --bs-secondary: #8d5524; /* nâu đậm */
+  --bs-light: #f5f2ed;     /* nền be sáng */
+  --bs-dark: #5c3d2e;      /* chữ nâu đậm */
+}
+
+body {
+  background-color: var(--bs-light);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
