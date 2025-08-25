@@ -1,5 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { collection, getDocs, query, orderBy, where, limit as fbLimit } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  limit as fbLimit,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../firebase";
 
 const BE = { light: "#fffaf4", header: "#d8c3a5", text: "#5c3d2e" };
@@ -7,7 +16,7 @@ const BE = { light: "#fffaf4", header: "#d8c3a5", text: "#5c3d2e" };
 export default function Admin() {
   // ----- UI state -----
   const [selectedDate, setSelectedDate] = useState(() => {
-    // mặc định hôm nay
+    // mặc định hôm nay (YYYY-MM-DD)
     return new Date().toISOString().split("T")[0];
   });
   const [onlyToday, setOnlyToday] = useState(true);
@@ -64,10 +73,12 @@ export default function Admin() {
         r.email,
         r.googleName,
         r.studentName,
+        r.className,   // NEW: cho phép tìm theo Lớp
+        r.teacher,     // NEW: cho phép tìm theo Giáo viên
         r.answers?.teachingPace,
         r.answers?.attitudes?.join(", "),
         r.answers?.fixLevel,
-        r.answers?.generalFeedback
+        r.answers?.generalFeedback,
       ]
         .filter(Boolean)
         .join(" ")
@@ -76,6 +87,19 @@ export default function Admin() {
     });
   }, [responses, search]);
 
+  // ----- delete one document -----
+  const handleDelete = async (id) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xoá bản ghi này?")) return;
+    try {
+      await deleteDoc(doc(db, "responses", id));
+      setResponses((prev) => prev.filter((r) => r.id !== id));
+      alert("Đã xoá thành công!");
+    } catch (e) {
+      console.error(e);
+      alert("Xoá thất bại: " + (e.message || "unknown error"));
+    }
+  };
+
   // ----- export CSV -----
   const exportCSV = () => {
     const header = [
@@ -83,26 +107,30 @@ export default function Admin() {
       "Email",
       "GoogleName",
       "StudentName",
+      "ClassName",    // NEW
+      "Teacher",      // NEW
       "TeachingPace",
       "TeachingPaceNote",
       "Attitudes",
       "AttitudeNote",
       "FixLevel",
       "FixNote",
-      "GeneralFeedback"
+      "GeneralFeedback",
     ];
     const rows = filtered.map((r) => [
       r.date || "",
       r.email || "",
       r.googleName || "",
       r.studentName || "",
+      r.className || "",
+      r.teacher || "",
       r.answers?.teachingPace || "",
       r.answers?.teachingPaceNote || "",
       (r.answers?.attitudes || []).join("; "),
       r.answers?.attitudeNote || "",
       r.answers?.fixLevel || "",
       r.answers?.fixNote || "",
-      (r.answers?.generalFeedback || "").replace(/\n/g, " ")
+      (r.answers?.generalFeedback || "").replace(/\n/g, " "),
     ]);
 
     const csv =
@@ -150,7 +178,7 @@ export default function Admin() {
               <label className="form-label" style={{ color: BE.text }}>Tìm kiếm</label>
               <input
                 className="form-control"
-                placeholder="email / tên / từ khóa…"
+                placeholder="email / tên / lớp / giáo viên…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -211,17 +239,20 @@ export default function Admin() {
               <th>Email</th>
               <th>Tên Google</th>
               <th>Tên học sinh</th>
+              <th>Lớp</th>         {/* NEW */}
+              <th>Giáo viên</th>   {/* NEW */}
               <th>Cách giảng</th>
               <th>Thái độ</th>
               <th>Sửa bài</th>
               <th>Góp ý</th>
+              <th>Hành động</th>   {/* NEW */}
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={8} className="text-center py-4">Đang tải…</td></tr>
+              <tr><td colSpan={11} className="text-center py-4">Đang tải…</td></tr>
             ) : filtered.length === 0 ? (
-              <tr><td colSpan={8} className="text-center py-4">Không có dữ liệu</td></tr>
+              <tr><td colSpan={11} className="text-center py-4">Không có dữ liệu</td></tr>
             ) : (
               filtered.map((r) => (
                 <tr key={r.id}>
@@ -229,6 +260,8 @@ export default function Admin() {
                   <td>{r.email}</td>
                   <td>{r.googleName}</td>
                   <td>{r.studentName || "-"}</td>
+                  <td>{r.className || "-"}</td>   {/* NEW */}
+                  <td>{r.teacher || "-"}</td>     {/* NEW */}
                   <td>
                     {r.answers?.teachingPace}
                     {r.answers?.teachingPaceNote ? ` – ${r.answers.teachingPaceNote}` : ""}
@@ -239,10 +272,18 @@ export default function Admin() {
                   </td>
                   <td>
                     {r.answers?.fixLevel}
-                    {r.answers?.fixNote ? ` – ${r.answers.fixNote}` : ""}
+                    {r.answers?.fixNote ? ` – ${r.answers?.fixNote}` : ""}
                   </td>
                   <td style={{ maxWidth: 320, whiteSpace: "pre-wrap" }}>
                     {r.answers?.generalFeedback}
+                  </td>
+                  <td>
+                    <button
+                      className="btn btn-sm btn-danger"
+                      onClick={() => handleDelete(r.id)}
+                    >
+                      Xoá
+                    </button>
                   </td>
                 </tr>
               ))
