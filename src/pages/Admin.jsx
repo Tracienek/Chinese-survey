@@ -238,7 +238,7 @@ export default function Admin() {
           <thead style={{ background: BE.header, color: BE.text }}>
             <tr>
               <th>Ngày</th>
-              <th>Email</th>
+              {/* <th>Email</th> */}
               <th>Tên Google</th>
               <th>Tên học sinh</th>
               <th>Lớp</th>       
@@ -259,7 +259,7 @@ export default function Admin() {
               filtered.map((r) => (
                 <tr key={r.id}>
                   <td>{r.date}</td>
-                  <td>{r.email}</td>
+                  {/* <td>{r.email}</td> */}
                   <td>{r.googleName}</td>
                   <td>{r.studentName || "-"}</td>
                   <td>{r.className || "-"}</td>  
