@@ -10,6 +10,8 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
+import ExpandableText from "./../components/ExpandableText";
+
 
 const BE = { light: "#fffaf4", header: "#d8c3a5", text: "#5c3d2e" };
 
@@ -274,8 +276,8 @@ export default function Admin() {
                     {r.answers?.fixLevel}
                     {r.answers?.fixNote ? ` – ${r.answers?.fixNote}` : ""}
                   </td>
-                  <td style={{ maxWidth: 320, whiteSpace: "pre-wrap" }}>
-                    {r.answers?.generalFeedback}
+                  <td>
+                    <ExpandableText text={r.answers?.generalFeedback} />
                   </td>
                   <td>
                     <button

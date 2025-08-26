@@ -9,3 +9,10 @@ body {
   background-color: var(--bs-light);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* số dòng hiển thị */
+  overflow: hidden;
+}
