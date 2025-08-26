@@ -75,8 +75,8 @@ export default function Admin() {
         r.email,
         r.googleName,
         r.studentName,
-        r.className,   // NEW: cho phép tìm theo Lớp
-        r.teacher,     // NEW: cho phép tìm theo Giáo viên
+        r.className,   
+        r.teacher,    
         r.answers?.teachingPace,
         r.answers?.attitudes?.join(", "),
         r.answers?.fixLevel,
@@ -241,13 +241,13 @@ export default function Admin() {
               <th>Email</th>
               <th>Tên Google</th>
               <th>Tên học sinh</th>
-              <th>Lớp</th>         {/* NEW */}
-              <th>Giáo viên</th>   {/* NEW */}
+              <th>Lớp</th>       
+              <th>Giáo viên</th>  
               <th>Cách giảng</th>
               <th>Thái độ</th>
               <th>Sửa bài</th>
               <th>Góp ý</th>
-              <th>Hành động</th>   {/* NEW */}
+              <th>Hành động</th>  
             </tr>
           </thead>
           <tbody>
@@ -262,8 +262,8 @@ export default function Admin() {
                   <td>{r.email}</td>
                   <td>{r.googleName}</td>
                   <td>{r.studentName || "-"}</td>
-                  <td>{r.className || "-"}</td>   {/* NEW */}
-                  <td>{r.teacher || "-"}</td>     {/* NEW */}
+                  <td>{r.className || "-"}</td>  
+                  <td>{r.teacher || "-"}</td>     
                   <td>
                     {r.answers?.teachingPace}
                     {r.answers?.teachingPaceNote ? ` – ${r.answers.teachingPaceNote}` : ""}
