@@ -92,24 +92,15 @@ export default function Login() {
             <div className="card-body p-4">
               <h3 className="text-center fw-bold mb-3" style={{ color: "#8d5524" }}>Ty Gấm</h3>
               <div className="alert alert-warning">
-                Bạn đang mở trong <b>ứng dụng</b> (Messenger/Zalo/Instagram…). Google
-                <b> chặn đăng nhập</b> ở đây. Vui lòng mở bằng trình duyệt:
+                Học sinh đang mở trong <b>ứng dụng</b> (Messenger/Zalo/Instagram…). Google
+                <b> chặn đăng nhập</b> ở đây. Vui lòng mở bằng trình duyệt Safari hoặc Chrome nhé
                 <div className="mt-3 d-flex gap-2 flex-wrap">
-                  <a className="btn btn-sm btn-primary" href={here} target="_blank" rel="noopener noreferrer">
-                    Mở trong trình duyệt
-                  </a>
-                  <a className="btn btn-sm btn-dark" href={androidChromeIntent}>
-                    Mở bằng Chrome (Android)
-                  </a>
                   <button
                     className="btn btn-sm btn-outline-secondary"
                     onClick={() => navigator.clipboard.writeText(here)}
                   >
                     Copy link
                   </button>
-                </div>
-                <div className="small mt-2">
-                  iOS: bấm <b>⋯</b> → <b>Open in Safari</b> · Android: bấm <b>⋮</b> → <b>Open in Chrome</b>
                 </div>
               </div>
               <div className="text-center text-muted small">© {new Date().getFullYear()} Ty Gấm</div>

@@ -113,6 +113,9 @@ export default function Survey() {
           <h3 className="card-title text-center mb-4" style={{ color: "#8d5524" }}>
             📋 Khảo sát hôm nay
           </h3>
+          <p className="text-center" style={{ color: "#555" }}>
+            Nhớ học bài mỗi ngày nhé
+          </p>
 
           {/* Tên học sinh (tùy chọn) */}
           <div className="mb-3">
